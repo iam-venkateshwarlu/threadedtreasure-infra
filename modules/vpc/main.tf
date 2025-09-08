@@ -1,11 +1,13 @@
 resource "aws_vpc" "this" {
    cidr_block = var.vpc_cidr
+    enable_dns_hostnames = true
+    enable_dns_support = true
 
    tags = {
      Name = "VPC"
    }
 }   
-
+#subnet
 resource "aws_subnet" "this" {
     vpc_id = aws_vpc.this.id
     cidr_block = "10.0.1.0/24"
@@ -35,8 +37,31 @@ resource "aws_route_table_association" "this" {
     route_table_id = aws_route_table.this.id
   
 }
-
+#igw
 resource "aws_internet_gateway" "this" {
     vpc_id = aws_vpc.this.id
   
+}
+
+#sg
+resource "aws_security_group" "this" {
+  vpc_id = aws_vpc.this.id
+
+  ingress {
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = [ "0.0.0.0/0" ]
+  }
+
+  tags = {
+    Name = "sg"
+  }
 }

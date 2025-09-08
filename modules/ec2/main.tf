@@ -1,8 +1,8 @@
 resource "aws_instance" "web" {
-    ami =  "ami-0c55b159cbfafe1f0" # Amazon Linux 2 AMI
+    ami =  "ami-00ca32bbc84273381" # Amazon Linux 2 AMI
     instance_type = var.instance_type
-    subnet_id = aws_subnet.public.id
-    vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+    subnet_id = var.subnet_id
+    vpc_security_group_ids = [var.security_group_id]
     associate_public_ip_address = true
 
     user_data = <<-EOF
